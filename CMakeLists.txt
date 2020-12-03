@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
-project("Project 6"
+project("Project 7"
   VERSION 0.0.0
-  DESCRIPTION "CS 1521 Project 6"
+  DESCRIPTION "CS 1521 Project 7"
   LANGUAGES CXX)
 
 if ("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
@@ -17,7 +17,6 @@ set(CMAKE_CXX_EXTENSIONs OFF)
 
 add_executable(main
   project7.cpp
-  BinaryNode.h
   BinaryNodeTree.h
-  BinaryTreeInterface.h
-  PrecondViolatedExcep.cpp)
+  PrecondViolatedExcep.cpp
+  NotFoundException.cpp)

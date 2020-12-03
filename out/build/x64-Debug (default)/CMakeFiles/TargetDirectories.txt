@@ -1,0 +1,3 @@
+C:/Users/clayt/source/repos/Project7/out/build/x64-Debug (default)/CMakeFiles/edit_cache.dir
+C:/Users/clayt/source/repos/Project7/out/build/x64-Debug (default)/CMakeFiles/main.dir
+C:/Users/clayt/source/repos/Project7/out/build/x64-Debug (default)/CMakeFiles/rebuild_cache.dir

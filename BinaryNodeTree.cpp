@@ -6,10 +6,38 @@
 #include "PrecondViolatedExcep.h"
 #include "NotFoundException.h"
 
+
+// 1. Display the contents of the binary tree
+// 2. flip or mirror the nodes in this binary search tree
+// 3. test if this binary tree contains a binary search tree
+// 4. find the minimum and maximum values in this binary tree
+// 5. prints all of the root to leaf paths in this binary tree
+// 6. test to see if the nodes in some path in this binary tree contains a given sum
+
+//template <typename ItemType>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //////////////////////////////////////////////////////////////
 //      Protected Utility Methods Section
 //////////////////////////////////////////////////////////////
 
+// returns height of binary tree
 template <typename ItemType>
 int BinaryNodeTree<ItemType>::getHeightHelper(BinaryNodePtr subTreePtr) const {
 
@@ -21,6 +49,7 @@ int BinaryNodeTree<ItemType>::getHeightHelper(BinaryNodePtr subTreePtr) const {
    return 0;
 }
 
+// returns number of nodes of binary tree
 template <typename ItemType>
 int BinaryNodeTree<ItemType>::getNumberOfNodesHelper(BinaryNodePtr subTreePtr) const {
 
@@ -33,6 +62,7 @@ int BinaryNodeTree<ItemType>::getNumberOfNodesHelper(BinaryNodePtr subTreePtr) c
    return 0;
 }
 
+// link into the parent node
 template <typename ItemType>
 auto BinaryNodeTree<ItemType>::balancedAdd(BinaryNodePtr subTreePtr,
                                            BinaryNodePtr newNodePtr) {
@@ -54,6 +84,7 @@ auto BinaryNodeTree<ItemType>::balancedAdd(BinaryNodePtr subTreePtr,
    return subTreePtr;
 }
 
+// remove the node that subTreePtr points at
 template <typename ItemType>
 auto BinaryNodeTree<ItemType>::moveValuesUpTree(BinaryNodePtr subTreePtr) {
 
@@ -84,6 +115,8 @@ auto BinaryNodeTree<ItemType>::moveValuesUpTree(BinaryNodePtr subTreePtr) {
  *  @param success Communicate to client whether we found the target.
  *
  *  @return A pointer to the node containing the target. */
+
+// 
 template <typename ItemType>
 auto BinaryNodeTree<ItemType>::removeValue(BinaryNodePtr subTreePtr,
                                            const ItemType& target,
@@ -110,6 +143,8 @@ auto BinaryNodeTree<ItemType>::removeValue(BinaryNodePtr subTreePtr,
    return subTreePtr;
 }
 
+
+// find a node in a tree
 template <typename ItemType>
 auto BinaryNodeTree<ItemType>::findNode(BinaryNodePtr subTreePtr,
                                         const ItemType& target) const {
@@ -134,6 +169,8 @@ auto BinaryNodeTree<ItemType>::findNode(BinaryNodePtr subTreePtr,
    return returnPtr;
 }
 
+
+// deep copy of the tree pointed to by the sub tree ptr and return it
 template <typename ItemType>
 auto BinaryNodeTree<ItemType>::copyTree(const BinaryNodePtr& subTreePtr) const {
 
@@ -150,6 +187,8 @@ auto BinaryNodeTree<ItemType>::copyTree(const BinaryNodePtr& subTreePtr) const {
 //////////////////////////////////////////////////////////////
 //      Protected Tree Traversal Sub-Section
 //////////////////////////////////////////////////////////////
+
+// 
 
 template <typename ItemType>
 void BinaryNodeTree<ItemType>::preorder(void visit(ItemType&),

@@ -1,0 +1,14 @@
+# ninja log v5
+9	423	628662540	CMakeFiles/main.dir/project7.cpp.obj	c65db5b7e4c1511
+0	424	628662540	CMakeFiles/main.dir/PrecondViolatedExcep.cpp.obj	8642f696b68939c9
+424	1030	628662541	main.exe	3faef55dd865f505
+1	375	628665908	CMakeFiles/main.dir/project7.cpp.obj	c65db5b7e4c1511
+10	227	628666101	CMakeFiles/main.dir/NotFoundException.cpp.obj	e1663bd070e7dbcb
+0	376	628666101	CMakeFiles/main.dir/project7.cpp.obj	c65db5b7e4c1511
+0	518	628666158	CMakeFiles/main.dir/project7.cpp.obj	c65db5b7e4c1511
+1	547	628666190	CMakeFiles/main.dir/project7.cpp.obj	c65db5b7e4c1511
+1	521	628666517	CMakeFiles/main.dir/project7.cpp.obj	c65db5b7e4c1511
+0	776	628667497	CMakeFiles/main.dir/project7.cpp.obj	c65db5b7e4c1511
+776	965	628667497	main.exe	52c0c84a89ff718
+0	621	628668660	CMakeFiles/main.dir/project7.cpp.obj	c65db5b7e4c1511
+621	809	628668660	main.exe	52c0c84a89ff718
