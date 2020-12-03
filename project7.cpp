@@ -6,6 +6,8 @@
 int main() {
 
 	BinaryNodeTree<int> tree1;
+	tree1.add(1);
+	//tree1.displayTree();
 
 	return 0;
 

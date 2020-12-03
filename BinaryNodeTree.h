@@ -20,8 +20,19 @@ private:
 
 protected:
 
-    //void displayTree()
+    // 1. Display the contents of the binary tree
+    // 2. flip or mirror the nodes in this binary search tree
+    // 3. test if this binary tree contains a binary search tree
+    // 4. find the minimum and maximum values in this binary tree
+    // 5. prints all of the root to leaf paths in this binary tree
+    // 6. test to see if the nodes in some path in this binary tree contains a given sum
 
+    void displayTree(BinaryNodePtr subTreePtr);
+    void flipTree();
+    bool testBST();
+    int findMinMax();
+    void rootLeafPaths();
+    bool givenSum();
 
 
    //------------------------------------------------------------

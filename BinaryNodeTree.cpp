@@ -6,6 +6,9 @@
 #include "PrecondViolatedExcep.h"
 #include "NotFoundException.h"
 
+//////////////////////////////////////////////////////////////
+//      Implement Project 7 Methods
+//////////////////////////////////////////////////////////////
 
 // 1. Display the contents of the binary tree
 // 2. flip or mirror the nodes in this binary search tree
@@ -14,23 +17,35 @@
 // 5. prints all of the root to leaf paths in this binary tree
 // 6. test to see if the nodes in some path in this binary tree contains a given sum
 
-//template <typename ItemType>
+//display tree
+template <typename ItemType>
+void BinaryNodeTree<ItemType>::displayTree(BinaryNodePtr subTreePtr) {
 
+   // if (subTreePtr != nullptr) {
+        //if (subTreePtr->leftChildPtr != nullptr) {displayTree(subTreePtr->leftChildPtr);}
+        //if (subTreePtr->rightChildPtr != nullptr) {displayTree(subTreePtr->leftChildPtr);}}
+   // else {std::cout << "the tree is empty" << std::endl;}
+}
 
+// flip or mirror tree
+template <typename ItemType>
+void BinaryNodeTree<ItemType>::flipTree() {}
 
+// test if this binary tree contains a binary search tree
+template <typename ItemType>
+bool BinaryNodeTree<ItemType>::testBST(){}
 
+//find max and min values in binary tree
+template <typename ItemType>
+int BinaryNodeTree<ItemType>::findMinMax() {}
 
+//prints all of the root to leaf paths 
+template <typename ItemType>
+void BinaryNodeTree<ItemType>::rootLeafPaths() {}
 
-
-
-
-
-
-
-
-
-
-
+//do the nodes in some path contain a given sum
+template <typename ItemType>
+bool BinaryNodeTree<ItemType>::givenSum() {}
 
 
 //////////////////////////////////////////////////////////////
