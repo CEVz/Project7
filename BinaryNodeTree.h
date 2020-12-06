@@ -27,12 +27,13 @@ protected:
     // 5. prints all of the root to leaf paths in this binary tree
     // 6. test to see if the nodes in some path in this binary tree contains a given sum
 
-    void displayTree(BinaryNodePtr subTreePtr);
+    void displayTree();
     void flipTree();
     bool testBST();
-    int findMinMax();
-    void rootLeafPaths();
-    bool givenSum();
+    int findMin();
+    int findMax();
+    void printRootToLeafPaths(BinaryNodePtr rootPtr, ItemType& anArray, ItemType& anItem);
+    bool doesSomePathHaveSum(ItemType& anItem);
 
 
    //------------------------------------------------------------

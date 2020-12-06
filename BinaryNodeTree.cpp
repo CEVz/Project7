@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>
 #include <new>
+#include <limits>
 
 #include "PrecondViolatedExcep.h"
 #include "NotFoundException.h"
@@ -19,12 +20,13 @@
 
 //display tree
 template <typename ItemType>
-void BinaryNodeTree<ItemType>::displayTree(BinaryNodePtr subTreePtr) {
+void BinaryNodeTree<ItemType>::displayTree() {
 
-   // if (subTreePtr != nullptr) {
-        //if (subTreePtr->leftChildPtr != nullptr) {displayTree(subTreePtr->leftChildPtr);}
-        //if (subTreePtr->rightChildPtr != nullptr) {displayTree(subTreePtr->leftChildPtr);}}
-   // else {std::cout << "the tree is empty" << std::endl;}
+   
+
+
+
+
 }
 
 // flip or mirror tree
@@ -37,15 +39,21 @@ bool BinaryNodeTree<ItemType>::testBST(){}
 
 //find max and min values in binary tree
 template <typename ItemType>
-int BinaryNodeTree<ItemType>::findMinMax() {}
+int BinaryNodeTree<ItemType>::findMin() {}
+
+// find max value in the binary tree
+template <typename ItemType>
+int BinaryNodeTree<ItemType>::findMax() {}
 
 //prints all of the root to leaf paths 
 template <typename ItemType>
-void BinaryNodeTree<ItemType>::rootLeafPaths() {}
+void BinaryNodeTree<ItemType>::printRootToLeafPaths(BinaryNodePtr rootPtr, 
+                                                    ItemType& anArray, 
+                                                    ItemType& anItem) {}
 
 //do the nodes in some path contain a given sum
 template <typename ItemType>
-bool BinaryNodeTree<ItemType>::givenSum() {}
+bool BinaryNodeTree<ItemType>::doesSomePathHaveSum(ItemType& anItem) {}
 
 
 //////////////////////////////////////////////////////////////
