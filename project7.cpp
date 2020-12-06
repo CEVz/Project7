@@ -22,18 +22,16 @@ int main() {
 
 
 	BinaryNodeTree<int> bt;
-	auto treePtr(std::make_unique<BinaryNodeTree<std::string>>());
-	tree1Ptr->add(1);
-
-
-
-	//tree1Ptr->add("10");
-	//tree1Ptr->add("20");
-	//std::cout << tree1Ptr->getHeight() << std::endl;
-	//std::cout << tree1Ptr->getNumberOfNodes() << std::endl;
-	//tree1Ptr->remove("10");
-	//std::cout << tree1Ptr->getHeight() << std::endl;
-	//std::cout << tree1Ptr->getNumberOfNodes() << std::endl;
+	bt.add(1);
+	bt.add(2);
+	bt.add(3);
+	bt.add(4);
+	bt.displayTree();
+	
+	
+	
+	
+	//auto treePtr(std::make_unique<BinaryNodeTree<std::string>>());
 
 	//bt.getNumberOfNodesHelper(tree1Ptr);
 

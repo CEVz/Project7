@@ -27,7 +27,6 @@ protected:
     // 5. prints all of the root to leaf paths in this binary tree
     // 6. test to see if the nodes in some path in this binary tree contains a given sum
 
-    void displayTree();
     void flipTree();
     bool testBST();
     int findMin();
@@ -135,6 +134,9 @@ public:
    // Overloaded Operator Section.
    //------------------------------------------------------------
    BinaryNodeTree& operator=(const BinaryNodeTree& rhs);
+
+   void display(BinaryNodePtr myNode);
+   void displayTree();
 };
 
 #include "BinaryNode.h"

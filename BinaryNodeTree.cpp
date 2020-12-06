@@ -16,18 +16,7 @@
 // 3. test if this binary tree contains a binary search tree
 // 4. find the minimum and maximum values in this binary tree
 // 5. prints all of the root to leaf paths in this binary tree
-// 6. test to see if the nodes in some path in this binary tree contains a given sum
-
-//display tree
-template <typename ItemType>
-void BinaryNodeTree<ItemType>::displayTree() {
-
-   
-
-
-
-
-}
+// 6.test to see if the nodes in some path in this binary tree contains a given sum
 
 // flip or mirror tree
 template <typename ItemType>
@@ -452,4 +441,38 @@ BinaryNodeTree<ItemType>::operator=(const BinaryNodeTree<ItemType>& rhs) {
    }
 
    return *this;
+}
+
+//display
+template <typename ItemType>
+void BinaryNodeTree<ItemType>::display(BinaryNodePtr myNode) {
+
+    int curHeight = getHeight();
+
+    if (myNode->rightChildPtr) {
+        curHeight++;
+        display(myNode->rightChildPtr);
+        curHeight--;
+    }
+    for (int i = 0; i < curHeight; i++) {
+        std::cout << " ";
+    }
+    std::cout << myNode->item << std::endl;
+    if (myNode->leftChildPtr) {
+        curHeight++;
+        display(myNode->leftChildPtr);
+        curHeight--;
+    }
+
+}
+//display tree
+template <typename ItemType>
+void BinaryNodeTree<ItemType>::displayTree() {
+
+    if (rootPtr) {
+        display(rootPtr);
+    }
+    else {
+        std::cout << "empty tree" << std::endl;
+    }
 }
