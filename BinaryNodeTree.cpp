@@ -6,44 +6,7 @@
 
 #include "PrecondViolatedExcep.h"
 #include "NotFoundException.h"
-
-//////////////////////////////////////////////////////////////
-//      Implement Project 7 Methods
-//////////////////////////////////////////////////////////////
-
-// 1. Display the contents of the binary tree
-// 2. flip or mirror the nodes in this binary search tree
-// 3. test if this binary tree contains a binary search tree
-// 4. find the minimum and maximum values in this binary tree
-// 5. prints all of the root to leaf paths in this binary tree
-// 6.test to see if the nodes in some path in this binary tree contains a given sum
-
-// flip or mirror tree
-template <typename ItemType>
-void BinaryNodeTree<ItemType>::flipTree() {}
-
-// test if this binary tree contains a binary search tree
-template <typename ItemType>
-bool BinaryNodeTree<ItemType>::testBST(){}
-
-//find max and min values in binary tree
-template <typename ItemType>
-int BinaryNodeTree<ItemType>::findMin() {}
-
-// find max value in the binary tree
-template <typename ItemType>
-int BinaryNodeTree<ItemType>::findMax() {}
-
-//prints all of the root to leaf paths 
-template <typename ItemType>
-void BinaryNodeTree<ItemType>::printRootToLeafPaths(BinaryNodePtr rootPtr, 
-                                                    ItemType& anArray, 
-                                                    ItemType& anItem) {}
-
-//do the nodes in some path contain a given sum
-template <typename ItemType>
-bool BinaryNodeTree<ItemType>::doesSomePathHaveSum(ItemType& anItem) {}
-
+#include "BinaryNodeTree.h"
 
 //////////////////////////////////////////////////////////////
 //      Protected Utility Methods Section
@@ -443,11 +406,8 @@ BinaryNodeTree<ItemType>::operator=(const BinaryNodeTree<ItemType>& rhs) {
    return *this;
 }
 
-//display
 template <typename ItemType>
 void BinaryNodeTree<ItemType>::display(BinaryNodePtr myNode) {
-
-    int curHeight = getHeight();
 
     if (myNode->rightChildPtr) {
         curHeight++;
@@ -465,7 +425,7 @@ void BinaryNodeTree<ItemType>::display(BinaryNodePtr myNode) {
     }
 
 }
-//display tree
+
 template <typename ItemType>
 void BinaryNodeTree<ItemType>::displayTree() {
 
@@ -476,3 +436,45 @@ void BinaryNodeTree<ItemType>::displayTree() {
         std::cout << "empty tree" << std::endl;
     }
 }
+
+template <typename ItemType>
+void BinaryNodeTree<ItemType>::flip(BinaryNodePtr myNode) {
+
+
+
+}
+
+template <typename ItemType>
+void BinaryNodeTree<ItemType>::flipTree() {
+
+    //if (rootPtr == nullptr) {
+    //    std::cout << "" << std::endl;
+    //}
+    //else {
+    //    rootPtr->leftChildPtr;
+    //    rootPtr->rightChildPtr;
+    //}
+
+}
+
+// test if this binary tree contains a binary search tree
+template <typename ItemType>
+bool BinaryNodeTree<ItemType>::testBST() {}
+
+//find max and min values in binary tree
+template <typename ItemType>
+int BinaryNodeTree<ItemType>::findMin() {}
+
+// find max value in the binary tree
+template <typename ItemType>
+int BinaryNodeTree<ItemType>::findMax() {}
+
+//prints all of the root to leaf paths 
+template <typename ItemType>
+void BinaryNodeTree<ItemType>::printRootToLeafPaths(BinaryNodePtr rootPtr,
+    ItemType& anArray,
+    ItemType& anItem) {}
+
+//do the nodes in some path contain a given sum
+template <typename ItemType>
+bool BinaryNodeTree<ItemType>::doesSomePathHaveSum(ItemType& anItem) {}

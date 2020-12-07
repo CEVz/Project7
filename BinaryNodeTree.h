@@ -19,22 +19,6 @@ private:
    BinaryNodePtr rootPtr;
 
 protected:
-
-    // 1. Display the contents of the binary tree
-    // 2. flip or mirror the nodes in this binary search tree
-    // 3. test if this binary tree contains a binary search tree
-    // 4. find the minimum and maximum values in this binary tree
-    // 5. prints all of the root to leaf paths in this binary tree
-    // 6. test to see if the nodes in some path in this binary tree contains a given sum
-
-    void flipTree();
-    bool testBST();
-    int findMin();
-    int findMax();
-    void printRootToLeafPaths(BinaryNodePtr rootPtr, ItemType& anArray, ItemType& anItem);
-    bool doesSomePathHaveSum(ItemType& anItem);
-
-
    //------------------------------------------------------------
    // Protected Utility Methods Section:
    // Recursive helper methods for the public methods.
@@ -85,6 +69,9 @@ protected:
    void setRootPtr(BinaryNodePtr newRootPtr);
 
 public:
+
+    int curHeight = getHeight();
+
    //------------------------------------------------------------
    // Constructor and Destructor Section.
    //------------------------------------------------------------
@@ -137,6 +124,13 @@ public:
 
    void display(BinaryNodePtr myNode);
    void displayTree();
+   void flip(BinaryNodePtr myNode);
+   void flipTree();
+   bool testBST();
+   int findMin();
+   int findMax();
+   void printRootToLeafPaths(BinaryNodePtr rootPtr, ItemType & anArray, ItemType & anItem);
+   bool doesSomePathHaveSum(ItemType & anItem);
 };
 
 #include "BinaryNode.h"
