@@ -408,7 +408,6 @@ BinaryNodeTree<ItemType>::operator=(const BinaryNodeTree<ItemType>& rhs) {
 
 template <typename ItemType>
 void BinaryNodeTree<ItemType>::display(BinaryNodePtr myNode) {
-
     if (myNode->rightChildPtr) {
         curHeight++;
         display(myNode->rightChildPtr);
@@ -423,12 +422,10 @@ void BinaryNodeTree<ItemType>::display(BinaryNodePtr myNode) {
         display(myNode->leftChildPtr);
         curHeight--;
     }
-
 }
 
 template <typename ItemType>
 void BinaryNodeTree<ItemType>::displayTree() {
-
     if (rootPtr) {
         display(rootPtr);
     }
@@ -438,23 +435,20 @@ void BinaryNodeTree<ItemType>::displayTree() {
 }
 
 template <typename ItemType>
-void BinaryNodeTree<ItemType>::flip(BinaryNodePtr myNode) {
-
-
-
+void BinaryNodeTree<ItemType>::flipTree() {
+    flip(rootPtr);
 }
 
 template <typename ItemType>
-void BinaryNodeTree<ItemType>::flipTree() {
-
-    //if (rootPtr == nullptr) {
-    //    std::cout << "" << std::endl;
-    //}
-    //else {
-    //    rootPtr->leftChildPtr;
-    //    rootPtr->rightChildPtr;
-    //}
-
+void BinaryNodeTree<ItemType>::flip(BinaryNodePtr rootPtr) {
+    if (rootPtr != NULL) {
+        BinaryNodePtr temp;
+        temp = rootPtr->leftChildPtr;
+        rootPtr->leftChildPtr = rootPtr->rightChildPtr;
+        rootPtr->rightChildPtr = temp;
+        flip(rootPtr->leftChildPtr);
+        flip(rootPtr->rightChildPtr);
+    }
 }
 
 // test if this binary tree contains a binary search tree

@@ -31,8 +31,5 @@ int main() {
 	bt.displayTree();
 	std::cout << " " << std::endl;
 	bt.flipTree();
-	//bt.displayTree();
-
-	return 0;
-
+	bt.displayTree();
 }
