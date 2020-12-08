@@ -3,6 +3,7 @@
 #include <memory>
 #include <new>
 #include <limits>
+#include <climits>
 
 #include "PrecondViolatedExcep.h"
 #include "NotFoundException.h"
@@ -451,11 +452,35 @@ void BinaryNodeTree<ItemType>::flip(BinaryNodePtr rootPtr) {
     }
 }
 
+template <typename ItemType>
+bool BinaryNodeTree<ItemType>::BST(BinaryNodePtr rootPtr, 
+    int min, int max){
+
+    BinaryNodePtr temp;
+    BinaryNodePtr lel;
+
+    temp = rootPtr->leftChildPtr;
+    lel = rootPtr->rightChildPtr;
+
+    if (temp > rootPtr || lel < rootPtr) {
+        return false;
+    }
+    if (temp > rootPtr && lel < rootPtr) {
+        return true;
+    }
+}
+
 // test if this binary tree contains a binary search tree
 template <typename ItemType>
-bool BinaryNodeTree<ItemType>::testBST() {}
+void BinaryNodeTree<ItemType>::testBST() {
+    if (BST(rootPtr, INT_MIN, INT_MAX)) {
+        std::cout << "This is a BST";
+    }
+    if (!BST(rootPtr, INT_MIN, INT_MAX)){
+        std::cout << "This is NOT a BST";
+    }
+}
 
-//find max and min values in binary tree
 template <typename ItemType>
 int BinaryNodeTree<ItemType>::findMin() {}
 

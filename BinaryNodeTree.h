@@ -2,6 +2,7 @@
 #define BINARY_NODE_TREE_
 
 #include <memory>
+#include <limits>
 
 #include "BinaryTreeInterface.h"
 
@@ -126,7 +127,8 @@ public:
    void displayTree();
    void flip(BinaryNodePtr myNode);
    void flipTree();
-   bool testBST();
+   bool BST(BinaryNodePtr myNode, int min, int max);
+   void testBST();
    int findMin();
    int findMax();
    void printRootToLeafPaths(BinaryNodePtr rootPtr, ItemType & anArray, ItemType & anItem);
