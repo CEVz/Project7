@@ -8,7 +8,7 @@ project("Project 7"
 if ("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
   add_compile_options(-Wall)
 elseif ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
-  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_options(-Wall -Wextra -Wpedantic -fpermissive)
 endif()
 
 set(CMAKE_CXX_STANDARD 14)

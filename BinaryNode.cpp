@@ -5,8 +5,8 @@
 
 template <typename ItemType>
 BinaryNodeTree<ItemType>::BinaryNode::BinaryNode(const ItemType& anItem, 
-												BinaryNodePtr leftPtr = nullptr,
-												BinaryNodePtr rightPtr = nullptr) :
+						 BinaryNodePtr leftPtr = nullptr,
+						 BinaryNodePtr rightPtr = nullptr) :
 	item(anItem),
 	leftChildPtr(leftPtr),
 	rightChildPtr(rightPtr) {

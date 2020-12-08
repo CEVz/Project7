@@ -1,0 +1,856 @@
+Script started on 2020-12-08 15:29:31-0600
+1% pwd
+/home/csugrads/vogel507/cs1521/projects/project7
+2% ls -al
+total 88
+drwx------ 6 vogel507 student  4096 Dec  8 15:29 .
+drwx------ 9 vogel507 student  4096 Dec  2 19:06 ..
+-rw------- 1 vogel507 student   648 Dec  8 15:28 BinaryNode.cpp
+-rw------- 1 vogel507 student   702 Dec  8 15:27 BinaryNode.h
+-rw------- 1 vogel507 student 13251 Dec  8 15:23 BinaryNodeTree.cpp
+-rw------- 1 vogel507 student  4512 Dec  8 15:23 BinaryNodeTree.h
+-rw------- 1 vogel507 student  3895 Dec  2 19:12 BinaryTreeInterface.h
+drwx------ 3 vogel507 student  4096 Dec  8 15:27 build
+-rw------- 1 vogel507 student   520 Dec  8 15:27 CMakeLists.txt
+drwx------ 8 vogel507 student  4096 Dec  8 15:28 .git
+-rw------- 1 vogel507 student    14 Dec  8 15:23 .gitignore
+-rw------- 1 vogel507 student   170 Dec  8 15:23 NotFoundException.cpp
+-rw------- 1 vogel507 student   282 Dec  8 15:23 NotFoundException.h
+drwx------ 3 vogel507 student  4096 Dec  8 15:23 out
+-rw------- 1 vogel507 student   181 Dec  2 19:14 PrecondViolatedExcep.cpp
+-rw------- 1 vogel507 student   457 Dec  2 19:15 PrecondViolatedExcep.h
+-rw------- 1 vogel507 student   752 Dec  8 15:23 project7.cpp
+-rw------- 1 vogel507 student     0 Dec  8 15:29 typescript.txt
+drwx------ 3 vogel507 student  4096 Dec  8 15:23 .vs
+3% cat -n CMakeLists.txt
+     1	cmake_minimum_required(VERSION 3.10)
+     2	
+     3	project("Project 7"
+     4	  VERSION 0.0.0
+     5	  DESCRIPTION "CS 1521 Project 7"
+     6	  LANGUAGES CXX)
+     7	
+     8	if ("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
+     9	  add_compile_options(-Wall)
+    10	elseif ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+    11	  add_compile_options(-Wall -Wextra -Wpedantic -fpermissive)
+    12	endif()
+    13	
+    14	set(CMAKE_CXX_STANDARD 14)
+    15	set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    16	set(CMAKE_CXX_EXTENSIONs OFF)
+    17	
+    18	add_executable(main
+    19	  project7.cpp
+    20	  BinaryNodeTree.h
+    21	  PrecondViolatedExcep.cpp
+    22	  NotFoundException.cpp)
+4% cat -n BinaryNode.cpp
+     1	#pragma once
+     2	
+     3	#include <iostream>
+     4	#include <memory>
+     5	
+     6	template <typename ItemType>
+     7	BinaryNodeTree<ItemType>::BinaryNode::BinaryNode(const ItemType& anItem, 
+     8							 BinaryNodePtr leftPtr = nullptr,
+     9							 BinaryNodePtr rightPtr = nullptr) :
+    10		item(anItem),
+    11		leftChildPtr(leftPtr),
+    12		rightChildPtr(rightPtr) {
+    13	
+    14	
+    15	}
+    16	
+    17	#ifdef DTOR_TEST
+    18	
+    19	template <typename ItemType>
+    20	BinaryNodeTree<ItemType>::BinaryNode::~BinaryNode() {
+    21	
+    22	    std::cout << "BinaryNode destructor called on:\n\titem: "
+    23	        << item
+    24	        << "\n\tleftChildPtr: "
+    25	        << leftChildPtr.get()
+    26	        << "\n\trightChildPtr: "
+    27	        << rightChildPtr.get()
+    28	        << std::endl;
+    29	}
+    30	
+    31	#endif
+5% cat -n BinaryNodeTree.h
+     1	#ifndef BINARY_NODE_TREE_
+     2	#define BINARY_NODE_TREE_
+     3	
+     4	#include <memory>
+     5	#include <limits>
+     6	
+     7	#include "BinaryTreeInterface.h"
+     8	
+     9	/** @class BinaryNodeTree BinaryNodeTree.h "BinaryNodeTree.h"
+    10	 *
+    11	 *  Specification of a link-based ADT binary tree. */
+    12	template <typename ItemType>
+    13	class BinaryNodeTree : public BinaryTreeInterface<ItemType> {
+    14	protected:
+    15	   class BinaryNode;
+    16	
+    17	   using BinaryNodePtr = std::shared_ptr<BinaryNode>;
+    18	
+    19	private:
+    20	   BinaryNodePtr rootPtr;
+    21	
+    22	protected:
+    23	   //------------------------------------------------------------
+    24	   // Protected Utility Methods Section:
+    25	   // Recursive helper methods for the public methods.
+    26	   //------------------------------------------------------------
+    27	
+    28	   int getHeightHelper(BinaryNodePtr subTreePtr) const;
+    29	
+    30	   int getNumberOfNodesHelper(BinaryNodePtr subTreePtr) const;
+    31	
+    32	   // Recursively adds a new node to the tree in a left/right fashion to
+    33	   // keep the tree balanced.
+    34	   auto balancedAdd(BinaryNodePtr subTreePtr,
+    35	                    BinaryNodePtr newNodePtr);
+    36	
+    37	   // Removes the target value from the tree by calling moveValuesUpTree
+    38	   // to overwrite value with value from child.
+    39	   auto removeValue(BinaryNodePtr subTreePtr,
+    40	                    const ItemType& target,
+    41	                    bool& success);
+    42	
+    43	   // Copies values up the tree to overwrite value in current node until
+    44	   // a leaf is reached; the leaf is then removed, since its value is
+    45	   // stored in the parent.
+    46	   auto moveValuesUpTree(BinaryNodePtr subTreePtr);
+    47	
+    48	   // Recursively searches for target value in the tree by using a
+    49	   // preorder traversal.
+    50	   auto findNode(BinaryNodePtr treePtr,
+    51	                 const ItemType& target) const;
+    52	
+    53	   // Copies the tree rooted at treePtr and returns a pointer to
+    54	   // the copy.
+    55	   auto copyTree(const BinaryNodePtr& treePtr) const;
+    56	
+    57	   // Recursive traversal helper methods:
+    58	   void preorder(void visit(ItemType&),
+    59	                 BinaryNodePtr treePtr);
+    60	   void inorder(void visit(ItemType&),
+    61	                BinaryNodePtr treePtr);
+    62	   void postorder(void visit(ItemType&),
+    63	                  BinaryNodePtr treePtr);
+    64	
+    65	   // Tools for manipulating BinaryNodes:
+    66	
+    67	   bool isLeaf(const BinaryNodePtr nodePtr) const;
+    68	
+    69	   auto getRootPtr() const;
+    70	   void setRootPtr(BinaryNodePtr newRootPtr);
+    71	
+    72	public:
+    73	
+    74	    int curHeight = getHeight();
+    75	
+    76	   //------------------------------------------------------------
+    77	   // Constructor and Destructor Section.
+    78	   //------------------------------------------------------------
+    79	   BinaryNodeTree() = default;
+    80	
+    81	   explicit BinaryNodeTree(const ItemType& rootItem);
+    82	
+    83	   BinaryNodeTree(const ItemType& rootItem,
+    84	                  const std::shared_ptr<BinaryNodeTree<ItemType>> leftTreePtr,
+    85	                  const std::shared_ptr<BinaryNodeTree<ItemType>> rightTreePtr);
+    86	
+    87	   BinaryNodeTree(const BinaryNodeTree<ItemType>& tree);
+    88	
+    89	   ~BinaryNodeTree() override = default;
+    90	
+    91	   //------------------------------------------------------------
+    92	   // Public BinaryTreeInterface Methods Section.
+    93	   //------------------------------------------------------------
+    94	   bool isEmpty() const override;
+    95	
+    96	   int getHeight() const override;
+    97	
+    98	   int getNumberOfNodes() const override;
+    99	
+   100	   ItemType getRootData() const override;
+   101	
+   102	   void setRootData(const ItemType& newData) override;
+   103	
+   104	   bool add(const ItemType& newData) override;
+   105	
+   106	   bool remove(const ItemType& data) override;
+   107	
+   108	   void clear() override;
+   109	
+   110	   ItemType getEntry(const ItemType& anEntry) const override;
+   111	
+   112	   bool contains(const ItemType& anEntry) const override;
+   113	
+   114	   //------------------------------------------------------------
+   115	   // Public Traversals Section.
+   116	   //------------------------------------------------------------
+   117	   void preorderTraverse(void visit(ItemType&) ) override;
+   118	   void inorderTraverse(void visit(ItemType&) ) override;
+   119	   void postorderTraverse(void visit(ItemType&) ) override;
+   120	
+   121	   //------------------------------------------------------------
+   122	   // Overloaded Operator Section.
+   123	   //------------------------------------------------------------
+   124	   BinaryNodeTree& operator=(const BinaryNodeTree& rhs);
+   125	
+   126	   void display(BinaryNodePtr myNode);
+   127	   void displayTree();
+   128	   void flip(BinaryNodePtr myNode);
+   129	   void flipTree();
+   130	   bool BST(BinaryNodePtr myNode, int min, int max);
+   131	   void testBST();
+   132	   int findMin();
+   133	   int findMax();
+   134	   void printRootToLeafPaths(BinaryNodePtr rootPtr, ItemType & anArray, ItemType & anItem);
+   135	   bool doesSomePathHaveSum(ItemType & anItem);
+   136	};
+   137	
+   138	#include "BinaryNode.h"
+   139	
+   140	#include "BinaryNodeTree.cpp"
+   141	
+   142	#endif
+6% cat -n BinaryNodeTree.cpp
+     1	#include <algorithm> // For std::max
+     2	#include <iostream>
+     3	#include <memory>
+     4	#include <new>
+     5	#include <limits>
+     6	#include <climits>
+     7	
+     8	#include "PrecondViolatedExcep.h"
+     9	#include "NotFoundException.h"
+    10	#include "BinaryNodeTree.h"
+    11	
+    12	//////////////////////////////////////////////////////////////
+    13	//      Protected Utility Methods Section
+    14	//////////////////////////////////////////////////////////////
+    15	
+    16	// returns height of binary tree
+    17	template <typename ItemType>
+    18	int BinaryNodeTree<ItemType>::getHeightHelper(BinaryNodePtr subTreePtr) const {
+    19	
+    20	   if (subTreePtr) {
+    21	      return 1 + std::max(getHeightHelper(subTreePtr->leftChildPtr),
+    22	                          getHeightHelper(subTreePtr->rightChildPtr) );
+    23	   }
+    24	
+    25	   return 0;
+    26	}
+    27	
+    28	// returns number of nodes of binary tree
+    29	template <typename ItemType>
+    30	int BinaryNodeTree<ItemType>::getNumberOfNodesHelper(BinaryNodePtr subTreePtr) const {
+    31	
+    32	   if (subTreePtr) {
+    33	      return 1 +
+    34	         getNumberOfNodesHelper(subTreePtr->leftChildPtr) +
+    35	         getNumberOfNodesHelper(subTreePtr->rightChildPtr);
+    36	   }
+    37	
+    38	   return 0;
+    39	}
+    40	
+    41	// link into the parent node
+    42	template <typename ItemType>
+    43	auto BinaryNodeTree<ItemType>::balancedAdd(BinaryNodePtr subTreePtr,
+    44	                                           BinaryNodePtr newNodePtr) {
+    45	
+    46	   if (!subTreePtr) {
+    47	      return newNodePtr;
+    48	   }
+    49	
+    50	   if (getHeightHelper(subTreePtr->leftChildPtr) >
+    51	       getHeightHelper(subTreePtr->rightChildPtr) ) {
+    52	      subTreePtr->rightChildPtr = balancedAdd(subTreePtr->rightChildPtr,
+    53	                                              newNodePtr);
+    54	   }
+    55	   else {
+    56	      subTreePtr->leftChildPtr = balancedAdd(subTreePtr->leftChildPtr,
+    57	                                             newNodePtr);
+    58	   }
+    59	
+    60	   return subTreePtr;
+    61	}
+    62	
+    63	// remove the node that subTreePtr points at
+    64	template <typename ItemType>
+    65	auto BinaryNodeTree<ItemType>::moveValuesUpTree(BinaryNodePtr subTreePtr) {
+    66	
+    67	   if (isLeaf(subTreePtr) ) {
+    68	      subTreePtr = nullptr;
+    69	      return subTreePtr;
+    70	   }
+    71	
+    72	   if (getHeightHelper(subTreePtr->leftChildPtr) >
+    73	       getHeightHelper(subTreePtr->rightChildPtr) ) {
+    74	      subTreePtr->item = subTreePtr->leftChildPtr->item;
+    75	      subTreePtr->leftChildPtr = moveValuesUpTree(subTreePtr->leftChildPtr);
+    76	   }
+    77	   else {
+    78	      subTreePtr->item = subTreePtr->rightChildPtr->item;
+    79	      subTreePtr->rightChildPtr = moveValuesUpTree(subTreePtr->rightChildPtr);
+    80	   }
+    81	
+    82	   return subTreePtr;
+    83	}
+    84	
+    85	/** Depth-first search of tree for item.
+    86	 *
+    87	 *  @param subTreePtr The tree to search.
+    88	 *
+    89	 *  @param target The target item to find.
+    90	 *
+    91	 *  @param success Communicate to client whether we found the target.
+    92	 *
+    93	 *  @return A pointer to the node containing the target. */
+    94	
+    95	// 
+    96	template <typename ItemType>
+    97	auto BinaryNodeTree<ItemType>::removeValue(BinaryNodePtr subTreePtr,
+    98	                                           const ItemType& target,
+    99	                                           bool& success) {
+   100	
+   101	   if (!subTreePtr) {
+   102	      return BinaryNodePtr(); // A nullptr with type 'BinaryNodePtr'.
+   103	   }
+   104	
+   105	   if (subTreePtr->item == target) {
+   106	      success = true;
+   107	      return moveValuesUpTree(subTreePtr);
+   108	   }
+   109	
+   110	   subTreePtr->leftChildPtr = removeValue(subTreePtr->leftChildPtr,
+   111	                                          target,
+   112	                                          success);
+   113	   if (!success) {
+   114	      subTreePtr->rightChildPtr = removeValue(subTreePtr->rightChildPtr,
+   115	                                              target,
+   116	                                              success);
+   117	   }
+   118	
+   119	   return subTreePtr;
+   120	}
+   121	
+   122	
+   123	// find a node in a tree
+   124	template <typename ItemType>
+   125	auto BinaryNodeTree<ItemType>::findNode(BinaryNodePtr subTreePtr,
+   126	                                        const ItemType& target) const {
+   127	
+   128	   BinaryNodePtr returnPtr;
+   129	
+   130	   if (!subTreePtr) {
+   131	      return returnPtr;
+   132	   }
+   133	
+   134	   if (subTreePtr->item == target) {
+   135	      return subTreePtr;
+   136	   }
+   137	
+   138	   returnPtr = findNode(subTreePtr->leftChildPtr,
+   139	                        target);
+   140	   if (!returnPtr) {
+   141	      returnPtr = findNode(subTreePtr->rightChildPtr,
+   142	                           target);
+   143	   }
+   144	
+   145	   return returnPtr;
+   146	}
+   147	
+   148	
+   149	// deep copy of the tree pointed to by the sub tree ptr and return it
+   150	template <typename ItemType>
+   151	auto BinaryNodeTree<ItemType>::copyTree(const BinaryNodePtr& subTreePtr) const {
+   152	
+   153	   if (!subTreePtr) {
+   154	      return BinaryNodePtr();
+   155	   }
+   156	
+   157	   // Copy tree nodes using a preorder traversal
+   158	   return std::make_shared<BinaryNode>(subTreePtr->item,
+   159	                                       copyTree(subTreePtr->leftChildPtr),
+   160	                                       copyTree(subTreePtr->rightChildPtr) );
+   161	}
+   162	
+   163	//////////////////////////////////////////////////////////////
+   164	//      Protected Tree Traversal Sub-Section
+   165	//////////////////////////////////////////////////////////////
+   166	
+   167	// 
+   168	
+   169	template <typename ItemType>
+   170	void BinaryNodeTree<ItemType>::preorder(void visit(ItemType&),
+   171	                                        BinaryNodePtr subTreePtr) {
+   172	
+   173	   if (subTreePtr) {
+   174	      visit(subTreePtr->item);
+   175	
+   176	      preorder(visit, subTreePtr->leftChildPtr);
+   177	      preorder(visit, subTreePtr->rightChildPtr);
+   178	   }
+   179	}
+   180	
+   181	template <typename ItemType>
+   182	void BinaryNodeTree<ItemType>::inorder(void visit(ItemType&),
+   183	                                       BinaryNodePtr subTreePtr) {
+   184	
+   185	   if (subTreePtr) {
+   186	      inorder(visit, subTreePtr->leftChildPtr);
+   187	
+   188	      visit(subTreePtr->item);
+   189	
+   190	      inorder(visit, subTreePtr->rightChildPtr);
+   191	   }
+   192	}
+   193	
+   194	template <typename ItemType>
+   195	void BinaryNodeTree<ItemType>::postorder(void visit(ItemType&),
+   196	                                         BinaryNodePtr subTreePtr) {
+   197	
+   198	   if (subTreePtr) {
+   199	      postorder(visit, subTreePtr->leftChildPtr);
+   200	      postorder(visit, subTreePtr->rightChildPtr);
+   201	
+   202	      visit(subTreePtr->item);
+   203	   }
+   204	}
+   205	
+   206	//////////////////////////////////////////////////////////////
+   207	//      Protected Node Access Sub-Section
+   208	//////////////////////////////////////////////////////////////
+   209	
+   210	template <typename ItemType>
+   211	bool BinaryNodeTree<ItemType>::isLeaf(BinaryNodePtr nodePtr) const {
+   212	
+   213	   return !nodePtr->leftChildPtr && !nodePtr->rightChildPtr;
+   214	}
+   215	
+   216	template <typename ItemType>
+   217	auto BinaryNodeTree<ItemType>::getRootPtr() const {
+   218	
+   219	   return rootPtr;
+   220	}
+   221	
+   222	template <typename ItemType>
+   223	void BinaryNodeTree<ItemType>::setRootPtr(BinaryNodePtr newRootPtr) {
+   224	
+   225	   rootPtr = newRootPtr;
+   226	}
+   227	
+   228	//////////////////////////////////////////////////////////////
+   229	//      PUBLIC METHODS BEGIN HERE
+   230	//////////////////////////////////////////////////////////////
+   231	
+   232	//////////////////////////////////////////////////////////////
+   233	//      Constructor and Destructor Section
+   234	//////////////////////////////////////////////////////////////
+   235	
+   236	template <typename ItemType>
+   237	BinaryNodeTree<ItemType>::BinaryNodeTree(const ItemType& rootItem)
+   238	   : rootPtr(std::make_shared<BinaryNode>(rootItem) ) {
+   239	}
+   240	
+   241	template <typename ItemType>
+   242	BinaryNodeTree<ItemType>::BinaryNodeTree(const ItemType& rootItem,
+   243	                                         const std::shared_ptr<BinaryNodeTree<ItemType>> leftTreePtr,
+   244	                                         const std::shared_ptr<BinaryNodeTree<ItemType>> rightTreePtr)
+   245	   : rootPtr(std::make_shared<BinaryNode>(rootItem,
+   246	                                          copyTree(leftTreePtr->rootPtr),
+   247	                                          copyTree(rightTreePtr->rootPtr)) ) {
+   248	}
+   249	
+   250	template <typename ItemType>
+   251	BinaryNodeTree<ItemType>::BinaryNodeTree(const BinaryNodeTree<ItemType>& treePtr) {
+   252	
+   253	   try {
+   254	      rootPtr = copyTree(treePtr.rootPtr);
+   255	   }
+   256	   catch (const std::bad_alloc&) {
+   257	      clear();
+   258	      throw;
+   259	   }
+   260	}
+   261	
+   262	//////////////////////////////////////////////////////////////
+   263	//      Public BinaryTreeInterface Methods Section
+   264	//////////////////////////////////////////////////////////////
+   265	
+   266	template <typename ItemType>
+   267	bool BinaryNodeTree<ItemType>::isEmpty() const {
+   268	
+   269	   return !rootPtr;
+   270	}
+   271	
+   272	template <typename ItemType>
+   273	int BinaryNodeTree<ItemType>::getHeight() const {
+   274	
+   275	   return getHeightHelper(rootPtr);
+   276	}
+   277	
+   278	template <typename ItemType>
+   279	int BinaryNodeTree<ItemType>::getNumberOfNodes() const {
+   280	
+   281	   return getNumberOfNodesHelper(rootPtr);
+   282	}
+   283	
+   284	template <typename ItemType>
+   285	void BinaryNodeTree<ItemType>::clear() {
+   286	
+   287	   rootPtr.reset();
+   288	}
+   289	
+   290	template <typename ItemType>
+   291	ItemType BinaryNodeTree<ItemType>::getRootData() const {
+   292	
+   293	   if (!isEmpty() ) {
+   294	      return rootPtr->item;
+   295	   }
+   296	
+   297	   std::string message("BinaryNodeTree::getRootData: called ");
+   298	   message += "on an empty tree.";
+   299	
+   300	   throw PrecondViolatedExcep(message);
+   301	}
+   302	
+   303	template <typename ItemType>
+   304	void BinaryNodeTree<ItemType>::setRootData(const ItemType& newItem) {
+   305	
+   306	   if (isEmpty() ) {
+   307	      try {
+   308	         rootPtr = std::make_shared<BinaryNode>(newItem);
+   309	      }
+   310	      catch (const std::bad_alloc&) {
+   311	         // What should we do with this? Return something? Throw a
+   312	         // different type of exception? Crash?
+   313	      }
+   314	   }
+   315	   else {
+   316	      rootPtr->item = newItem;
+   317	   }
+   318	}
+   319	
+   320	template <typename ItemType>
+   321	bool BinaryNodeTree<ItemType>::add(const ItemType& newData) {
+   322	
+   323	   try {
+   324	      rootPtr = balancedAdd(rootPtr,
+   325	                            std::make_shared<BinaryNode>(newData) );
+   326	   }
+   327	   catch (const std::bad_alloc&) {
+   328	      return false;
+   329	   }
+   330	
+   331	   return true;
+   332	}
+   333	
+   334	template <typename ItemType>
+   335	bool BinaryNodeTree<ItemType>::remove(const ItemType& target) {
+   336	
+   337	   bool isSuccessful(false);
+   338	
+   339	   rootPtr = removeValue(rootPtr, target, isSuccessful);
+   340	
+   341	   return isSuccessful;
+   342	}
+   343	
+   344	template <typename ItemType>
+   345	ItemType BinaryNodeTree<ItemType>::getEntry(const ItemType& anEntry) const {
+   346	
+   347	   auto binaryNodePtr(findNode(rootPtr, anEntry) );
+   348	
+   349	   if (binaryNodePtr) {
+   350	      return binaryNodePtr->item;
+   351	   }
+   352	
+   353	   std::string message("BinaryNodeTree::getEntry: Entry ");
+   354	   message += "not found in this tree.";
+   355	
+   356	   throw NotFoundException(message);
+   357	}
+   358	
+   359	template <typename ItemType>
+   360	bool BinaryNodeTree<ItemType>::contains(const ItemType& anEntry) const {
+   361	
+   362	   return findNode(rootPtr, anEntry) != nullptr;
+   363	}
+   364	
+   365	//////////////////////////////////////////////////////////////
+   366	//      Public Traversals Section
+   367	//////////////////////////////////////////////////////////////
+   368	
+   369	template <typename ItemType>
+   370	void BinaryNodeTree<ItemType>::preorderTraverse(void visit(ItemType&) ) {
+   371	
+   372	   preorder(visit, rootPtr);
+   373	}
+   374	
+   375	template <typename ItemType>
+   376	void BinaryNodeTree<ItemType>::inorderTraverse(void visit(ItemType&) ) {
+   377	
+   378	   inorder(visit, rootPtr);
+   379	}
+   380	
+   381	template <typename ItemType>
+   382	void BinaryNodeTree<ItemType>::postorderTraverse(void visit(ItemType&) ) {
+   383	
+   384	   postorder(visit, rootPtr);
+   385	}
+   386	
+   387	//////////////////////////////////////////////////////////////
+   388	//      Overloaded Operator
+   389	//////////////////////////////////////////////////////////////
+   390	
+   391	template <typename ItemType>
+   392	BinaryNodeTree<ItemType>&
+   393	BinaryNodeTree<ItemType>::operator=(const BinaryNodeTree<ItemType>& rhs) {
+   394	
+   395	   auto oldTreePtr(rootPtr);
+   396	
+   397	   if (this != &rhs) {
+   398	      try {
+   399	         rootPtr = copyTree(rhs.rootPtr);
+   400	      }
+   401	      catch (const std::bad_alloc&) {
+   402	         rootPtr = oldTreePtr;
+   403	         throw;
+   404	      }
+   405	   }
+   406	
+   407	   return *this;
+   408	}
+   409	
+   410	template <typename ItemType>
+   411	void BinaryNodeTree<ItemType>::display(BinaryNodePtr myNode) {
+   412	    if (myNode->rightChildPtr) {
+   413	        curHeight++;
+   414	        display(myNode->rightChildPtr);
+   415	        curHeight--;
+   416	    }
+   417	    for (int i = 0; i < curHeight; i++) {
+   418	        std::cout << " ";
+   419	    }
+   420	    std::cout << myNode->item << std::endl;
+   421	    if (myNode->leftChildPtr) {
+   422	        curHeight++;
+   423	        display(myNode->leftChildPtr);
+   424	        curHeight--;
+   425	    }
+   426	}
+   427	
+   428	template <typename ItemType>
+   429	void BinaryNodeTree<ItemType>::displayTree() {
+   430	    if (rootPtr) {
+   431	        display(rootPtr);
+   432	    }
+   433	    else {
+   434	        std::cout << "empty tree" << std::endl;
+   435	    }
+   436	}
+   437	
+   438	template <typename ItemType>
+   439	void BinaryNodeTree<ItemType>::flipTree() {
+   440	    flip(rootPtr);
+   441	}
+   442	
+   443	template <typename ItemType>
+   444	void BinaryNodeTree<ItemType>::flip(BinaryNodePtr rootPtr) {
+   445	    if (rootPtr != NULL) {
+   446	        BinaryNodePtr temp;
+   447	        temp = rootPtr->leftChildPtr;
+   448	        rootPtr->leftChildPtr = rootPtr->rightChildPtr;
+   449	        rootPtr->rightChildPtr = temp;
+   450	        flip(rootPtr->leftChildPtr);
+   451	        flip(rootPtr->rightChildPtr);
+   452	    }
+   453	}
+   454	
+   455	template <typename ItemType>
+   456	bool BinaryNodeTree<ItemType>::BST(BinaryNodePtr rootPtr, 
+   457	    int min, int max){
+   458	
+   459	    BinaryNodePtr temp;
+   460	    BinaryNodePtr lel;
+   461	
+   462	    temp = rootPtr->leftChildPtr;
+   463	    lel = rootPtr->rightChildPtr;
+   464	
+   465	    if (temp > rootPtr || lel < rootPtr) {
+   466	        return false;
+   467	    }
+   468	    if (temp > rootPtr && lel < rootPtr) {
+   469	        return true;
+   470	    }
+   471	}
+   472	
+   473	// test if this binary tree contains a binary search tree
+   474	template <typename ItemType>
+   475	void BinaryNodeTree<ItemType>::testBST() {
+   476	    if (BST(rootPtr, INT_MIN, INT_MAX)) {
+   477	        std::cout << "This is a BST";
+   478	    }
+   479	    if (!BST(rootPtr, INT_MIN, INT_MAX)){
+   480	        std::cout << "This is NOT a BST";
+   481	    }
+   482	}
+   483	
+   484	template <typename ItemType>
+   485	int BinaryNodeTree<ItemType>::findMin() {}
+   486	
+   487	// find max value in the binary tree
+   488	template <typename ItemType>
+   489	int BinaryNodeTree<ItemType>::findMax() {}
+   490	
+   491	//prints all of the root to leaf paths 
+   492	template <typename ItemType>
+   493	void BinaryNodeTree<ItemType>::printRootToLeafPaths(BinaryNodePtr rootPtr,
+   494	    ItemType& anArray,
+   495	    ItemType& anItem) {}
+   496	
+   497	//do the nodes in some path contain a given sum
+   498	template <typename ItemType>
+   499	bool BinaryNodeTree<ItemType>::doesSomePathHaveSum(ItemType& anItem) {}
+7% cat -n NotFoundException.h
+     1	#ifndef NOT_FOUND_EXCEPTION_
+     2	#define NOT_FOUND_EXCEPTION_
+     3	
+     4	#include <stdexcept>
+     5	#include <string>
+     6	
+     7	class NotFoundException : public std::logic_error {
+     8	public:
+     9		explicit NotFoundException(const std::string& message = "");
+    10	
+    11		virtual ~NotFoundException() noexcept = default;
+    12	};
+    13	
+    14	#endif8% cat -n NotFoundException.cpp
+     1	#include <stdexcept>
+     2	#include <string>
+     3	
+     4	#include "NotFoundException.h"
+     5	
+     6	NotFoundException::NotFoundException(const std::string& message)
+     7		: std::logic_error(message) {
+     8	}
+9% cat -n project67[K[K7.cpp
+     1	#include <iostream>
+     2	#include <string>
+     3	#include <memory>
+     4	#include <limits>
+     5	
+     6	#include "BinaryNodeTree.h"
+     7	
+     8	template <typename ItemType>
+     9	void display(ItemType& anItem) {
+    10	
+    11		std::cout << anItem << std::endl;
+    12	
+    13	}
+    14	
+    15	void reverse(std::string& anItem) {
+    16	
+    17		anItem = std::string(anItem.rbegin(), anItem.rend());
+    18	
+    19	}
+    20	
+    21	int main() {
+    22	
+    23		BinaryNodeTree<int> bt;
+    24		std::cout << "Standard Binary Tree" << std::endl;
+    25		bt.add(5);
+    26		bt.add(3);
+    27		bt.add(7);
+    28		bt.add(2);
+    29		bt.add(6);
+    30		bt.add(4);
+    31		bt.add(1);
+    32		bt.add(8);
+    33		bt.displayTree();
+    34		std::cout << " " << std::endl;
+    35		bt.testBST();
+    36		std::cout << " " << std::endl;
+    37		std::cout << " " << std::endl;
+    38		std::cout << "Flipped Binary Tree" << std::endl;
+    39		bt.flipTree();
+    40		bt.displayTree();
+    41		std::cout << " " << std::endl;
+    42		bt.testBST();
+    43	
+    44	}10% git --no-pager log --no-color
+commit 33bc91608bc1b2bb9372b9513f9da5018ed3f1d7 (HEAD -> master, origin/master)
+Author: CEVz <clayton.vogele28@gmail.com>
+Date:   Tue Dec 8 15:21:28 2020 -0600
+
+    final submission for project7
+
+commit 6a5f14f58db4ee1807dfae61b4b3232ed1bebd58
+Author: CEVz <clayton.vogele28@gmail.com>
+Date:   Mon Dec 7 16:03:30 2020 -0600
+
+    created fliptree method
+
+commit 0f3ac798ba72d44bf3004c4f36bf958b8bee4f2a
+Author: CEVz <clayton.vogele28@gmail.com>
+Date:   Mon Dec 7 14:35:15 2020 -0600
+
+    finsihed display function
+
+commit a1ae563f6c1455a9e28804f44165784bc33e77e7
+Author: CEVz <clayton.vogele28@gmail.com>
+Date:   Sun Dec 6 17:18:18 2020 -0600
+
+    made display function
+
+commit 25a7a03252f360fa0dad0eb6555840ebde0eaec2
+Author: CEVz <clayton.vogele28@gmail.com>
+Date:   Sat Dec 5 19:08:58 2020 -0600
+
+    working project
+
+commit 120309a651b275e332bbfbe3000098e150f0987f
+Author: CEVz <clayton.vogele28@gmail.com>
+Date:   Wed Dec 2 21:54:33 2020 -0600
+
+    updated BinaryNodeTree h and cpp files
+
+commit bae993370993bb581d0421a26c229490e9b47247
+Author: CEVz <clayton.vogele28@gmail.com>
+Date:   Wed Dec 2 21:21:00 2020 -0600
+
+    finished binarynode.h file
+
+commit 30cc5b5b3a0e9adef2fe44438cb784f57f794929
+Author: Clayton Vogele <vogel507@umn.edu>
+Date:   Wed Dec 2 19:28:00 2020 -0600
+
+    initial files for project7
+11% cd build/
+12% make
+[ 25%] [32mBuilding CXX object CMakeFiles/main.dir/project7.cpp.o[0m
+In file included from [01m[K/home/csugrads/vogel507/cs1521/projects/project7/BinaryNode.h:31:0[m[K,
+                 from [01m[K/home/csugrads/vogel507/cs1521/projects/project7/BinaryNodeTree.h:138[m[K,
+                 from [01m[K/home/csugrads/vogel507/cs1521/projects/project7/project7.cpp:6[m[K:
+[01m[K/home/csugrads/vogel507/cs1521/projects/project7/BinaryNode.cpp:7:1:[m[K [01;31m[Kerror: [m[Kredeclaration of ‘[01m[KBinaryNodeTree<ItemType>::BinaryNode::BinaryNode(const ItemType&, BinaryNodeTree<ItemType>::BinaryNode::BinaryNodePtr, BinaryNodeTree<ItemType>::BinaryNode::BinaryNodePtr)[m[K’ may not have default arguments [[01;31m[K-fpermissive[m[K]
+ [01;31m[KBinaryNodeTree<ItemType>[m[K::BinaryNode::BinaryNode(const ItemType& anItem,
+ [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
+CMakeFiles/main.dir/build.make:62: recipe for target 'CMakeFiles/main.dir/project7.cpp.o' failed
+make[2]: *** [CMakeFiles/main.dir/project7.cpp.o] Error 1
+CMakeFiles/Makefile2:67: recipe for target 'CMakeFiles/main.dir/all' failed
+make[1]: *** [CMakeFiles/main.dir/all] Error 2
+Makefile:83: recipe for target 'all' failed
+make: *** [all] Error 2
+13% exit
+exit
+
+Script done on 2020-12-08 15:31:08-0600

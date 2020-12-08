@@ -17,15 +17,15 @@ public:
    BinaryNodePtr leftChildPtr;
    BinaryNodePtr rightChildPtr;
 
-   explicit BinaryNode(const ItemType& anItem,
+   BinaryNode(const ItemType& anItem,
                        BinaryNodePtr leftPtr = nullptr,
                        BinaryNodePtr rightPtr = nullptr);
 
-#ifdef DTOR_TEST
+   #ifdef DTOR_TEST
    ~BinaryNode();
-#else
+   #else
    ~BinaryNode() = default;
-#endif
+   #endif
 };
 
 #include "BinaryNode.cpp"
